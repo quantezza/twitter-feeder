@@ -66,7 +66,7 @@ if __name__ == '__main__':
     CONSUMER_SECRET = data['CONSUMER_SECRET']
     ACCESS_TOKEN_KEY = data['ACCESS_TOKEN_KEY']
     ACCESS_TOKEN_SECRET = data['ACCESS_TOKEN_SECRET']
-    KAFKA_BROKER=os.environ['KAFKA_IP'] + ":" + os.environ['KAFKA_PORT']
+    KAFKA_BROKER=os.environ['SVC_KAFKA_KAFKA_SERVICE_HOST'] + ":" + os.environ['SVC_KAFKA_KAFKA_SERVICE_PORT']
     print("KAFKA_BROKER=" + KAFKA_BROKER)
 
     tweet_feeder= threading.Thread(name="Tweet producer", target=tweet_producer)
