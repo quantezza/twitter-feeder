@@ -49,6 +49,7 @@ def tweet_producer():
                     twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
         except:
             print(traceback.format_exc())
+            time.sleep(60)
     return
 
 app = Flask(__name__)
