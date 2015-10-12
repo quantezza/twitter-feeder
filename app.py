@@ -73,4 +73,4 @@ if __name__ == '__main__':
     tweet_feeder.daemon = True
     tweet_feeder.start()
 
-    app.run(debug=True, host='0.0.0.0', port=os.environ["APP_PORT"])
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ["APP_PORT"]) )
