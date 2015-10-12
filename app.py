@@ -47,6 +47,10 @@ def tweet_producer():
                     tweet['text'] = item['text']
                     producer.send_messages(b'tweets', bytes(json.dumps(tweet), "UTF-8"))
                     twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
+                elif 'message' in item and item['code'] == 88:
+                     print('SUSPEND, RATE LIMIT EXCEEDED: %s\n' % item['message'])
+                     time.sleep(120)
+                     break
         except:
             print(traceback.format_exc())
             print("Sleeping for 120 secs.")
