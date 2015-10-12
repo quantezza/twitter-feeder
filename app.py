@@ -21,28 +21,32 @@ twitter_metrics["tweets-consumed"] = 0
 def tweet_producer():
     kafka = KafkaClient(KAFKA_BROKER)
     producer = SimpleProducer(kafka)
-    api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
+    while True:
+        try:
+            api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
-    pager = TwitterRestPager.TwitterRestPager(api, 'search/tweets', {'q': SEARCH_TERM})
-    for item in pager.get_iterator():
-        if 'text' in item:
-            tweet = {}
-            # tweet['coordinates'] = item['coordinates']
-            tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
-            # tweet['place'] = item['place']
-            # ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(item['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
+            pager = TwitterRestPager.TwitterRestPager(api, 'search/tweets', {'q': SEARCH_TERM})
+            for item in pager.get_iterator():
+                if 'text' in item:
+                    tweet = {}
+                    # tweet['coordinates'] = item['coordinates']
+                    tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
+                    # tweet['place'] = item['place']
+                    # ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(item['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
 
-            # tweet['@timestamp'] = item['created_at']
-            tweet['username'] = item['user']['name']
-            tweet['handle'] = item['user']['screen_name']
-            tweet['lang'] = item['lang']
-            tweet['timezone'] = item['user']['time_zone']
-            tweet['followers'] = item['user']['followers_count']
-            tweet['location'] = item['user']['location']
-            tweet['retweeted'] = item['retweeted']
-            tweet['text'] = item['text']
-            producer.send_messages(b'tweets', bytes(json.dumps(tweet), "UTF-8"))
-            twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
+                    # tweet['@timestamp'] = item['created_at']
+                    tweet['username'] = item['user']['name']
+                    tweet['handle'] = item['user']['screen_name']
+                    tweet['lang'] = item['lang']
+                    tweet['timezone'] = item['user']['time_zone']
+                    tweet['followers'] = item['user']['followers_count']
+                    tweet['location'] = item['user']['location']
+                    tweet['retweeted'] = item['retweeted']
+                    tweet['text'] = item['text']
+                    producer.send_messages(b'tweets', bytes(json.dumps(tweet), "UTF-8"))
+                    twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
+        except:
+            pass
     return
 
 app = Flask(__name__)
