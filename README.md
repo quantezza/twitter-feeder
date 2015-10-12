@@ -13,7 +13,7 @@ How to run locally ?
 3. Make sure the secret.yaml is in the right place.
 
 How to deploy on the server:
-
+    ```    
       oc create -f python3.yaml
       oc secrets new app-secret template/twitter-secret.yaml
       oc secrets add --for=mount serviceaccount/default secret/app-secret
@@ -24,3 +24,4 @@ How to deploy on the server:
 
 
       oc start-build twitter-feeder
+    ```
