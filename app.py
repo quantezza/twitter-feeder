@@ -11,21 +11,17 @@ CONSUMER_KEY = ''
 CONSUMER_SECRET = ''
 ACCESS_TOKEN_KEY = ''
 ACCESS_TOKEN_SECRET = ''
+KAFKA_BROKER=''
 
 SEARCH_TERM = 'docker'
-
-kafka = KafkaClient("localhost:9092")
-producer = SimpleProducer(kafka)
 
 twitter_metrics = {}
 twitter_metrics["tweets-consumed"] = 0
 
 def tweet_producer():
-
-    api = TwitterAPI(CONSUMER_KEY,
-                     CONSUMER_SECRET,
-                     ACCESS_TOKEN_KEY,
-                     ACCESS_TOKEN_SECRET)
+    kafka = KafkaClient(KAFKA_BROKER)
+    producer = SimpleProducer(kafka)
+    api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
     pager = TwitterRestPager.TwitterRestPager(api, 'search/tweets', {'q': SEARCH_TERM})
     for item in pager.get_iterator():
@@ -60,8 +56,8 @@ def status():
 
 if __name__ == '__main__':
 
-    # api_key = open('/etc/secret-volume/twitter-secret.yaml')
-    api_key = open('/Users/arrawatia/code/try-openshift/template/twitter-secret.yaml')
+
+    api_key = open(os.environ['SECRET_DIR'] + '/twitter-secret.yaml')
     data = load(api_key)
     api_key.close()
     print(data)
@@ -70,6 +66,8 @@ if __name__ == '__main__':
     CONSUMER_SECRET = data['CONSUMER_SECRET']
     ACCESS_TOKEN_KEY = data['ACCESS_TOKEN_KEY']
     ACCESS_TOKEN_SECRET = data['ACCESS_TOKEN_SECRET']
+    KAFKA_BROKER=os.environ['KAFKA_IP'] + ":" + os.environ['KAFKA_PORT']
+    print("KAFKA_BROKER=" + KAFKA_BROKER)
 
     tweet_feeder= threading.Thread(name="Tweet producer", target=tweet_producer)
     tweet_feeder.daemon = True
