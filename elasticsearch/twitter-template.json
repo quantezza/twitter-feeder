@@ -4,7 +4,7 @@
         "twitter": {}
     },
     "mappings": {
-        "tweets": {
+        "tweet": {
             "_source": {
                 "enabled": true
             },
