@@ -14,8 +14,8 @@ How to run locally ?
 
 How to deploy on the server:
     ```    
-      oc create -f python3.yaml
-      oc secrets new app-secret template/twitter-secret.yaml
+      oc create -f test/python3.yaml
+      oc secrets new app-secret twitter-secret.yaml
       oc secrets add --for=mount serviceaccount/default secret/app-secret
       oc new-app python3 \
           --name='twitter-feeder' \
