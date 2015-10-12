@@ -11,6 +11,9 @@
             "properties": {
                 "text": {
                     "type": "string"
+                },
+                "@timestamp": {
+                  "type": "date"
                 }
             },
             "dynamic_templates": [
