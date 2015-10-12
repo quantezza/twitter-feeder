@@ -6,6 +6,8 @@ from TwitterAPI import TwitterAPI, TwitterRestPager
 from yaml import load, dump
 import json
 from kafka import SimpleProducer, KafkaClient
+import traceback
+import sys
 
 CONSUMER_KEY = ''
 CONSUMER_SECRET = ''
@@ -46,7 +48,7 @@ def tweet_producer():
                     producer.send_messages(b'tweets', bytes(json.dumps(tweet), "UTF-8"))
                     twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
         except:
-            pass
+            print(traceback.format_exc())
     return
 
 app = Flask(__name__)
