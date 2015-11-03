@@ -4,13 +4,16 @@
         "twitter": {}
     },
     "mappings": {
-        "tweets": {
+        "tweet": {
             "_source": {
                 "enabled": true
             },
             "properties": {
                 "text": {
                     "type": "string"
+                },
+                "@timestamp": {
+                  "type": "date"
                 }
             },
             "dynamic_templates": [
