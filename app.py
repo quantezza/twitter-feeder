@@ -63,6 +63,7 @@ app = Flask(__name__)
 def status():
     status = {}
     status["metrics"] = twitter_metrics
+    status["search_term"] = SEARCH_TERM
     # status["env"] = {str(key) : str(os.environ[key]) for  key in os.environ.keys() }
     return jsonify(status)
 
