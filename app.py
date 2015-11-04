@@ -15,7 +15,7 @@ ACCESS_TOKEN_KEY = ''
 ACCESS_TOKEN_SECRET = ''
 KAFKA_BROKER=''
 
-SEARCH_TERM = 'Hana'
+SEARCH_TERM = '#NationalStressAwarenessDay'
 
 twitter_metrics = {}
 twitter_metrics["tweets-consumed"] = 0
