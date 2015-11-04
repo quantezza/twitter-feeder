@@ -15,7 +15,7 @@ ACCESS_TOKEN_KEY = ''
 ACCESS_TOKEN_SECRET = ''
 KAFKA_BROKER=''
 
-SEARCH_TERM = 'docker'
+SEARCH_TERM = 'SAP HANA'
 
 twitter_metrics = {}
 twitter_metrics["tweets-consumed"] = 0
