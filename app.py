@@ -33,7 +33,8 @@ def tweet_producer():
                 if 'text' in item:
                     tweet = {}
                     # tweet['coordinates'] = item['coordinates']
-                    tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
+                    tweet['@timestamp'] = int(time.time() * 1000.0)
+                    # tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
                     # tweet['place'] = item['place']
                     # ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(item['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
 
