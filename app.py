@@ -16,7 +16,7 @@ ACCESS_TOKEN_KEY = ''
 ACCESS_TOKEN_SECRET = ''
 KAFKA_BROKER=''
 
-SEARCH_TERM = '#NationalStressAwarenessDay'
+SEARCH_TERM = 'docker'
 
 twitter_metrics = {}
 twitter_metrics["tweets-consumed"] = 0
