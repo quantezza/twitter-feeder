@@ -8,7 +8,7 @@ How to run locally ?
     virtualenv env
     source venv/bin/activate
     pip install -r requirements.txt
-    SVC_KAFKA_KAFKA_SERVICE_HOST=localhost SVC_KAFKA_KAFKA_SERVICE_PORT=9092 SECRET_DIR=/Users/arrawatia/code/try-openshift/template/ APP_PORT=5000 python app.py
+    SVC_BROKER_KAFKA_SERVICE_HOST=localhost SVC_BROKER_KAFKA_SERVICE_PORT=9092 SECRET_DIR=`pwd` APP_PORT=5000 python app.py
     ```
 3. Make sure the secret.yaml is in the right place.
 

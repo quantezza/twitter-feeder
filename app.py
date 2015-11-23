@@ -28,11 +28,13 @@ def tweet_producer():
         try:
             api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
+            print('Using search term: %s' % SEARCH_TERM)
             pager = TwitterRestPager.TwitterRestPager(api, 'search/tweets', {'q': SEARCH_TERM})
             for item in pager.get_iterator():
                 if 'text' in item:
                     tweet = {}
                     # tweet['coordinates'] = item['coordinates']
+                    #rhoover: the mktime/strptime below is incorrect (making times in the future) so using this for now
                     tweet['@timestamp'] = int(time.time() * 1000.0)
                     # tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
                     # tweet['place'] = item['place']
@@ -53,24 +55,14 @@ def tweet_producer():
                      print('SUSPEND, RATE LIMIT EXCEEDED: %s\n' % item['message'])
                      time.sleep(120)
                      break
+                print('Consumed %s tweets' % twitter_metrics["tweets-consumed"])
         except:
             print(traceback.format_exc())
             print("Sleeping for 120 secs.")
             time.sleep(120)
     return
 
-app = Flask(__name__)
-
-@app.route('/', methods=['GET'])
-def status():
-    status = {}
-    status["metrics"] = twitter_metrics
-    status["search_term"] = SEARCH_TERM
-    # status["env"] = {str(key) : str(os.environ[key]) for  key in os.environ.keys() }
-    return jsonify(status)
-
 if __name__ == '__main__':
-
 
     api_key = open(os.environ['SECRET_DIR'] + '/twitter-secret.yaml')
     data = load(api_key)
@@ -84,8 +76,4 @@ if __name__ == '__main__':
     KAFKA_BROKER=os.environ['SVC_BROKER_KAFKA_SERVICE_HOST'] + ":" + os.environ['SVC_BROKER_KAFKA_SERVICE_PORT']
     print("KAFKA_BROKER=" + KAFKA_BROKER)
 
-    tweet_feeder= threading.Thread(name="Tweet producer", target=tweet_producer)
-    tweet_feeder.daemon = True
-    tweet_feeder.start()
-
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ["APP_PORT"]) )
+    tweet_producer()
