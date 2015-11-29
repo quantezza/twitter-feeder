@@ -33,6 +33,7 @@ def tweet_producer():
             for item in pager.get_iterator():
                 if 'text' in item:
                     tweet = {}
+                    tweet['id'] = item['id']
                     # tweet['coordinates'] = item['coordinates']
                     #rhoover: the mktime/strptime below is incorrect (making times in the future) so using this for now
                     tweet['@timestamp'] = int(time.time() * 1000.0)
