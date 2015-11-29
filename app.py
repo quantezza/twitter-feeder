@@ -36,6 +36,7 @@ def tweet_producer():
                     # tweet['coordinates'] = item['coordinates']
                     #rhoover: the mktime/strptime below is incorrect (making times in the future) so using this for now
                     tweet['@timestamp'] = int(time.time() * 1000.0)
+                    tweet['created_at'] = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(item['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
                     # tweet['@timestamp'] = time.mktime(time.strptime(item['created_at'],"%a %b %d %H:%M:%S +0000 %Y")) * 1000
                     # tweet['place'] = item['place']
                     # ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(item['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
