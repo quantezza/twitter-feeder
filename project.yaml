@@ -1,0 +1,55 @@
+
+code:
+  twitter-feeder:
+    template: python3
+    requires:
+      - kafka
+    path: app.py
+    source_repository: https://github.com/quantezza/twitter-feeder
+    params:
+      - name: APP_NAME
+        value: twitter-feeder
+    secrets:
+      - name: twitter_keys
+        value:
+          API_KEY: xxxx
+  kafka-init:
+    template: kafka-topics
+    requires:
+      - kafka
+    path: kafka
+  es-init:
+    template: es-index-template
+    requires:
+      - es
+    path: elasticsearch
+  kibana-init:
+    template: kibana-index
+    requires:
+      - kibana
+    path: kibana
+  rico-es-load:
+    template: rico-elasticsearch-load-x1.small
+    requires:
+      - kafka-init
+      - es-init
+    path: rico-es-load
+  rico-hana-load:
+    template: rico-hana-load-x1.small
+    requires:
+      - kafka-init
+    path: hana
+
+services:
+  zk:
+    template: zk-exhibitor-x1.small
+  kafka:
+    template: kafka-x3.small
+    requires:
+      - zk
+  es:
+    template: elasticsearch-x3.small
+  kibana:
+    template: kibana4-x1.small
+    requires:
+      - es
