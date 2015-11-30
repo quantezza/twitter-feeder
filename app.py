@@ -28,7 +28,7 @@ def tweet_producer():
         try:
             api = TwitterAPI(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
-            print('Using search term: %s' % SEARCH_TERM)
+            print('Using search term: %s' % SEARCH_TERM, file=sys.stderr)
             pager = TwitterRestPager.TwitterRestPager(api, 'search/tweets', {'q': SEARCH_TERM})
             for item in pager.get_iterator():
                 if 'text' in item:
@@ -54,13 +54,13 @@ def tweet_producer():
                     producer.send_messages(b'tweets', bytes(json.dumps(tweet), "UTF-8"))
                     twitter_metrics["tweets-consumed"] = twitter_metrics["tweets-consumed"] + 1
                 elif 'message' in item and item['code'] == 88:
-                     print('SUSPEND, RATE LIMIT EXCEEDED: %s\n' % item['message'])
+                     print('SUSPEND, RATE LIMIT EXCEEDED: %s\n' % item['message'], file=sys.stderr)
                      time.sleep(120)
                      break
-                print('Consumed %s tweets' % twitter_metrics["tweets-consumed"])
+                print('Consumed %s tweets' % twitter_metrics["tweets-consumed"], file=sys.stderr)
         except:
-            print(traceback.format_exc())
-            print("Sleeping for 120 secs.")
+            print(traceback.format_exc(), file=sys.stderr)
+            print("Sleeping for 120 secs.", file=sys.stderr)
             time.sleep(120)
     return
 
@@ -69,13 +69,13 @@ if __name__ == '__main__':
     api_key = open(os.environ['SECRET_DIR'] + '/twitter-secret.yaml')
     data = load(api_key)
     api_key.close()
-    print(data)
+    print(data, file=sys.stderr)
 
     CONSUMER_KEY = data['CONSUMER_KEY']
     CONSUMER_SECRET = data['CONSUMER_SECRET']
     ACCESS_TOKEN_KEY = data['ACCESS_TOKEN_KEY']
     ACCESS_TOKEN_SECRET = data['ACCESS_TOKEN_SECRET']
     KAFKA_BROKER=os.environ['KAFKA_BROKER_SERVICE_HOST'] + ":" + os.environ['KAFKA_BROKER_SERVICE_PORT']
-    print("KAFKA_BROKER=" + KAFKA_BROKER)
+    print("KAFKA_BROKER=" + KAFKA_BROKER, file=sys.stderr)
 
     tweet_producer()
